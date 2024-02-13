@@ -94,10 +94,10 @@ def train(model, data, optimizer, scheduler, opt):
         np.set_printoptions(formatter={'float': '{: 0.5f}'.format})
         start = time.time()
         [pre, rec, map_, ndcg] = train_epoch(model, user_dl, matrices,  optimizer, opt)
-        print('\r(Training)  P@k:{pre},    R@k:{rec}, \n'
-              '(Training)map@k:{map_}, ndcg@k:{ndcg}, '
-              'elapse:{elapse:3.3f} min'
-              .format(elapse=(time.time() - start) / 60, pre=pre, rec=rec, map_=map_, ndcg=ndcg))
+        # print('\r(Training)  P@k:{pre},    R@k:{rec}, \n'
+        #       '(Training)map@k:{map_}, ndcg@k:{ndcg}, '
+        #       'elapse:{elapse:3.3f} min'
+        #       .format(elapse=(time.time() - start) / 60, pre=pre, rec=rec, map_=map_, ndcg=ndcg))
 
         start = time.time()
         [pre, rec, map_, ndcg], user_seq_embeddings, user_gra_embeddings = eval_epoch(model, user_valid_dl, matrices, opt)

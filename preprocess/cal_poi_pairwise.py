@@ -24,9 +24,6 @@ def read_interaction():
     for eachline in train_data:
         uid, lid, scores, times = eachline.strip().split()
         uid, lid, scores, times = int(uid), int(lid), int(scores), int(times)
-        # if C.DATASET == 'Yelp2018':
-        #     lid = lid - 1
-        # print(uid, lid)
         if scores > 3:
             interaction_matrix[uid][lid] = 1
         else:
@@ -51,8 +48,6 @@ def read_interaction():
     # print(adjacency_matrix[adjacency_matrix!=0].max(), adjacency_matrix[adjacency_matrix!=0].min())
     # print(correlation_matrix.max(), correlation_matrix.min())
 
-    # print(nwhere)
-    # print(POI_matrix)
     np.save(directory_path + 'adjacency_matrix.npy', adjacency_matrix.cpu().numpy())
     np.save(directory_path + 'correlation_matrix.npy', correlation_matrix.cpu().numpy())
 
