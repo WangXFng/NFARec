@@ -1,0 +1,8 @@
+.idea/*
+*.pyc
+*.pkl
+*.npy
+*.png
+result/*
+*.json
+*.csv
