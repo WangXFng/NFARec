@@ -43,7 +43,7 @@ class Encoder(nn.Module):
         # get individual adj
         local_cor = torch.zeros((event_type.size(0), event_type.size(1), event_type.size(1)), device='cuda:0')
         for i, e in enumerate(event_type):
-            # Thanks to Lin Fang for reminding me to correct a mistake here.
+            # the slicing operation
             local_cor[i] = adj_matrix[e - 1, :][:, e - 1]
             # performance can be enhanced by adding the element in the diagonal of the normalized adjacency matrix.
             local_cor[i] += adj_matrix[e - 1, e - 1]
@@ -205,7 +205,7 @@ class Model(nn.Module):
 
         prediction = self.predictor(user_seq_rep, candidates, user_gra_rep, user_gra2_rep)
 
-        return attn_output, prediction, user_seq_rep, user_gra_rep
+        return attn_output, prediction #, user_seq_rep, user_gra_rep
 
     # def transformer_hawkes_process(self, event_type):
     #     mask = Utils.get_non_pad_mask(event_type)

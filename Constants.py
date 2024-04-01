@@ -1,6 +1,6 @@
 PAD = 0
 # Yelp2023  Beauty Food.com Amazon-book ml-1M
-DATASET = "Amazon-book"
+DATASET = "Yelp2023git "
 ENCODER = 'THP'  # NHP THP Transformer
 ABLATIONs = {'w/oWeSch', 'w/oPopDe', 'w/oSA', 'w/oNorm', 'w/oUSpec', 'w/oHgcn', 'w/oDisen'}
 ABLATION = 'Full'

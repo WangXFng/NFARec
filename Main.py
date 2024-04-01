@@ -30,7 +30,7 @@ def train_epoch(model, user_dl, matrices, optimizer, opt):
         user_idx, event_type, event_times, sentiment, test_label = map(lambda x: x.to(opt.device), batch)
 
         """ forward """
-        att_output, prediction, user_seq_rep, user_gra_rep = model(user_idx, event_type, matrices)
+        att_output, prediction = model(user_idx, event_type, matrices)
 
         """ compute metric """
         metric.pre_rec_top(pre, rec, map_, ndcg, prediction, test_label, event_type)
@@ -55,11 +55,11 @@ def eval_epoch(model, user_valid_dl, matrices, opt):
     """ Epoch operation in evaluation phase. """
 
     model.eval()
-    user_idx_set = []
+    # user_idx_set = []
     # recom_lists_map = {}
     # user_idx_ndcg = np.zeros(C.USER_NUMBER)
-    user_seq_embeddings = torch.zeros((C.USER_NUMBER, opt.d_model), device='cuda:0')
-    user_gra_embeddings = torch.zeros((C.USER_NUMBER, opt.d_model), device='cuda:0')
+    # user_seq_embeddings = torch.zeros((C.USER_NUMBER, opt.d_model), device='cuda:0')
+    # user_gra_embeddings = torch.zeros((C.USER_NUMBER, opt.d_model), device='cuda:0')
 
     [pre, rec, map_, ndcg] = [[[] for i in range(4)] for j in range(4)]
     with torch.no_grad():
@@ -67,19 +67,19 @@ def eval_epoch(model, user_valid_dl, matrices, opt):
                           desc='  - (Validation) ', leave=False):
             """ prepare test data """
             user_idx, event_type, event_times, sentiment, test_label = map(lambda x: x.to(opt.device), batch)
-            user_idx_set.extend(user_idx.cpu().numpy().tolist())
+            # user_idx_set.extend(user_idx.cpu().numpy().tolist())
 
             """ forward """
-            enc_out, prediction, user_seq_rep, user_gra_rep = model(user_idx, event_type, matrices)  # X = (UY+Z) ^ T
+            enc_out, prediction = model(user_idx, event_type, matrices)  # X = (UY+Z) ^ T
 
-            user_seq_embeddings[user_idx] = user_seq_rep
-            user_gra_embeddings[user_idx] = user_gra_rep
+            # user_seq_embeddings[user_idx] = user_seq_rep
+            # user_gra_embeddings[user_idx] = user_gra_rep
 
             """ compute metric """
             metric.pre_rec_top(pre, rec, map_, ndcg, prediction, test_label, event_type)
 
     results_np = map(lambda x: [np.around(np.mean(i), 5) for i in x], [pre, rec, map_, ndcg])
-    return results_np, user_seq_embeddings, user_gra_embeddings
+    return results_np #, user_seq_embeddings, user_gra_embeddings
 
 
 def train(model, data, optimizer, scheduler, opt):
@@ -100,7 +100,7 @@ def train(model, data, optimizer, scheduler, opt):
         #       .format(elapse=(time.time() - start) / 60, pre=pre, rec=rec, map_=map_, ndcg=ndcg))
 
         start = time.time()
-        [pre, rec, map_, ndcg], user_seq_embeddings, user_gra_embeddings = eval_epoch(model, user_valid_dl, matrices, opt)
+        [pre, rec, map_, ndcg] = eval_epoch(model, user_valid_dl, matrices, opt)
         print('\r(Test)  P@k:{pre},    R@k:{rec}, \n'
               '(Test)map@k:{map_}, ndcg@k:{ndcg}, '
               'elapse:{elapse:3.3f} min'
@@ -171,13 +171,14 @@ def main(trial):
     opt.batch_size = 16
     opt.dropout = 0.5
     opt.smooth = 0.03
+    opt.n_head = 1
+    opt.d_model = 1024
 
-    if C.DATASET == 'ml-1M': opt.d_model, opt.n_head, opt.epoch, opt.batch_size = 1024, 1, 30, 32
-    elif C.DATASET == 'Yelp2023': opt.d_model, opt.n_head, opt.epoch, opt.batch_size = 1024, 3, 15, 16
-    elif C.DATASET == 'Food.com': opt.d_model, opt.n_head, opt.epoch, opt.batch_size = 1024, 1, 6, 32
-    elif C.DATASET == 'Beauty': opt.d_model, opt.n_head, opt.epoch, opt.batch_size = 1024, 1, 16, 32
-    elif C.DATASET == 'Amazon-book': opt.d_model, opt.n_head, opt.epoch, opt.batch_size = 1024, 2, 16, 32
-    else: opt.d_model, opt.n_head = 1024, 1
+    if C.DATASET == 'ml-1M': opt.epoch, opt.batch_size = 30, 32
+    elif C.DATASET == 'Yelp2023': opt.epoch, opt.batch_size = 15, 16
+    elif C.DATASET == 'Food.com': opt.epoch, opt.batch_size = 6, 32
+    elif C.DATASET == 'Beauty': opt.epoch, opt.batch_size = 16, 32
+    elif C.DATASET == 'Amazon-book': opt.epoch, opt.batch_size = 16, 16
 
     print('[Info] parameters: {}'.format(opt))
     num_types = C.ITEM_NUMBER
