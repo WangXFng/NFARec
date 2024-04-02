@@ -17,9 +17,8 @@ class HGCEncoder(nn.Module):
         """ Get the non-padding positions. """
         return seq.ne(C.PAD).type(torch.float).unsqueeze(-1)
 
-
     def get_latest_k_mask(self, seq, k):
-        # 生成一个对角线上前k个元素为1的矩阵，其余为0
+        # Generate a matrix with the first k elements on the diagonal as 1 and the rest as 0
         bz, seq_len = seq.size()
         mask = torch.zeros(seq_len, seq_len, device='cuda:0')
         # mask = torch.zeros_like(seq)
@@ -48,21 +47,10 @@ class HGCLayer(nn.Module):
 
         self.linear = nn.Linear(d_model, d_model)
         nn.init.xavier_uniform_(self.linear.weight)
-        #
-        # self.linear2 = nn.Linear(d_model, d_model)
-        # nn.init.xavier_uniform_(self.linear2.weight)
 
         self.linear3 = nn.Linear(d_model, d_model)
         nn.init.xavier_uniform_(self.linear3.weight)
 
-        # self.w_qs = nn.Linear(d_model, d_k, bias=False)
-        # self.w_ks = nn.Linear(d_model, d_k, bias=False)
-        # # self.w_vs = nn.Linear(d_model, n_head, bias=False)
-        # nn.init.xavier_uniform_(self.w_qs.weight)
-        # nn.init.xavier_uniform_(self.w_ks.weight)
-        # # nn.init.xavier_uniform_(self.w_vs.weight)
-        #
-        # # self.eps = 1
         self.temperature = d_model ** 0.5
         self.dropout = nn.Dropout(0.1)
 
