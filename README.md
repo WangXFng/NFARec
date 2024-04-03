@@ -9,7 +9,7 @@
 * If you have any problem, please feel free to contact me at kaysenn@163.com.
 
 ### Dependencies
-	pip install requirement.txt
+	pip install -r requirement.txt
 ___
 
 ### Datasets
