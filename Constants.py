@@ -35,8 +35,8 @@ DICT = {
     'ml-1M': 2,
     'Beauty': USER_NUMBER,
     'Yelp2023': USER_NUMBER,
-    # 'Food.com': USER_NUMBER,
-    # 'Amazon-book': USER_NUMBER,
+    # 'Food.com': 1e5,
+    # 'Amazon-book': 1e5,
 }
 
 

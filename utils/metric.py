@@ -9,6 +9,10 @@ def precision_recall_ndcg_at_k(k, rankedlist, test_matrix):
     map = 0
     ap = 0
 
+    # Please check consistency with your baselines.
+    # All baselines and this method followed this setting to compute the ideal DCG through a truncation.
+    # (See Line. 94 (https://github.com/Coder-Yu/SELFRec/blob/main/util/evaluation.py))
+
     n_k = k if len(test_matrix) > k else len(test_matrix)
     for i in range(n_k):
         idcg_k += 1 / math.log(i + 2, 2)

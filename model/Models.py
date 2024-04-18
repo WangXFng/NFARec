@@ -3,12 +3,9 @@ from utils.Utils import *
 import Constants as C
 import torch.nn
 from utils import Utils
-# from gMLP.gmlp import gMLP
-#
 from model.THP.THP import THPEncoder
 from model.HGC.HGC import HGCEncoder
 from model.transformer.Layers import EncoderLayer
-# from transformerls.lstransformer import TransformerLS
 
 
 class Encoder(nn.Module):
@@ -61,13 +58,8 @@ class Encoder(nn.Module):
                     slf_attn_mask=slf_attn_mask,  # slf_attn_mask
                 )
             attn_output = enc_output
-            # return _, _.mean(1), correlation_output.mean(1), outputs
 
         if C.ENCODER == 'THP':
-            # non_pad_mask = get_non_pad_mask(event_type)
-            # mask = Utils.get_non_pad_mask_for_matrix(event_type)
-            # for i, enc_layer in enumerate(self.layer_stack):
-            #     attn_output, correlation_output = enc_layer(enc_output, local_cor, event_type)
             for i, enc_layer in enumerate(self.layer_stack):
                 attn_output = enc_layer(enc_output, local_cor, event_type)
         elif C.ENCODER == 'NHP':
@@ -80,28 +72,7 @@ class Encoder(nn.Module):
         for i, enc_layer in enumerate(self.hgc_layers):
             correlation_output, outputs = enc_layer(enc_output, local_cor, cor_matrix, event_type)
 
-            # # 32, L, 1024,   32 L N
-            #
-            # # mask = Utils.get_attn_key_pad_mask(event_type, cor_matrix).transpose(1, 2)
-            # # outputs = self.linear(correlation_output.mean(1)) * (cor_matrix[event_type-1].mean(1))
-            # # * (cor_matrix[event_type-1] * mask).mean(1)
-            #
-            # outputs = torch.matmul(correlation_output.transpose(1, 2), cor_matrix[event_type-1]).mean(2)
-
-            #
-            # outputs = correlation_output.mean(1)
-
-            # outputs = []
-            # for i, (o, e) in enumerate(zip(correlation_output, event_type)):
-            #     # o: L, 1024
-            #     outputs.append(o * cor_matrix[e-1])
-            #     # outputs.append(torch.matmul(o.transpose(0, 1), cor_matrix[e-1]))
-            #
-            # outputs = torch.stack(outputs, 0)
-
         return attn_output, attn_output.mean(1), correlation_output.mean(1), outputs
-        # return enc_output, enc_output.mean(1), correlation_output.mean(1)
-        # return enc_output[:, -1, :]
 
 
 class RNN_layers(nn.Module):
@@ -176,12 +147,7 @@ class Model(nn.Module):
             n_layers=n_layers, n_head=n_head, dropout=dropout)
         self.num_types = num_types
 
-        # self.THPEncoder = THPEncoder(d_model)
-
         self.predictor = Predictor(d_model, num_types, opt)
-
-        # self.linear = nn.Linear(d_model, d_model)
-        # nn.init.xavier_uniform_(self.linear.weight)
 
         # convert hidden vectors into a scalar
         self.linear = nn.Linear(d_model, 3)
@@ -192,10 +158,6 @@ class Model(nn.Module):
         # parameter for the softplus function
         self.beta = nn.Parameter(torch.tensor(1.0))
 
-        # self.dropout = nn.Dropout(0.4)
-
-        # self.norm_emb = nn.Embedding(1, d_model, padding_idx=C.PAD)  # dding 0
-
     def forward(self, user_id, event_type, matrices):
         mask = Utils.get_non_pad_mask(event_type)
         enc_output = self.event_emb(event_type) * mask
@@ -205,17 +167,4 @@ class Model(nn.Module):
 
         prediction = self.predictor(user_seq_rep, candidates, user_gra_rep, user_gra2_rep)
 
-        return attn_output, prediction #, user_seq_rep, user_gra_rep
-
-    # def transformer_hawkes_process(self, event_type):
-    #     mask = Utils.get_non_pad_mask(event_type)
-    #     enc_output = self.event_emb(event_type) * mask
-    #
-    #     # candidates = self.event_emb.weight
-    #     attn_output = self.THPEncoder(enc_output, event_type)
-    #     # # event_embeddings, enc_output.mean(1), correlation_output.mean(1), outputs
-    #     # enc_output, user_embeddings, correlation_output, outputs = self.encoder(event_type, enc_output, matrices)
-    #     #
-    #     # prediction = self.predictor(enc_output, user_embeddings, candidates, correlation_output, outputs)
-    #
-    #     return attn_output
+        return attn_output, prediction
