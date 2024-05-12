@@ -1,5 +1,5 @@
 ## NFARec (SIGIR'24) 
-	The paper will be released soon.
+	The paper is released at [arxiv](https://arxiv.org/pdf/2404.06900).
 
 ### Run
 	python Main.py
