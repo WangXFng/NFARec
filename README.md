@@ -1,4 +1,9 @@
-## NFARec (SIGIR'24) [arxiv](https://arxiv.org/pdf/2404.06900)
+## NFARec (SIGIR'24) [arxiv](https://arxiv.org/pdf/2404.06900).
+
+## Paper
+- NFARec: A Negative Feedback-Aware Recommender Model, **SIGIR 2024 Oral**.
+- [**Xinfeng Wang**](https://wangxfng.github.io/), Fumiyo Fukumoto, Jin Cui, Yoshimi Suzuki, Dongjin Yu.
+
 
 ### Run
 	python Main.py
@@ -33,5 +38,6 @@ If this repository helps you, please cite:
 	  title={NFARec: A Negative Feedback-Aware Recommender Model},
 	  author={Wang, Xinfeng and Fukumoto, Fumiyo and Cui, Jin and Suzuki, Yoshimi and Yu, Dongjin},
 	  booktitle={Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+   	  pages={935–-945},
 	  year={2024}
 	}
