@@ -110,23 +110,12 @@ def train(model, data, optimizer, scheduler, opt):
         scheduler.step()
         if best_[-1][1] < ndcg[1]: best_ = [pre, rec, map_, ndcg]
 
-        # path = './result/{}/emb/'.format(C.DATASET)
-        # folder = "{accuracy:8.5f}/".format(accuracy=best_[-1][1])
-        # if not os.path.exists(path) or len(os.listdir(path)) == 0:
-        #     if not os.path.exists(path): os.mkdir(path)
-        #     if not os.path.exists(path+folder): os.mkdir(path+folder)
-        #     # np.save(path+folder+"wo_item.npy", model.event_emb.weight.detach().cpu().numpy())
-        #     np.save(path+folder+"user_seq_embeddings.npy", user_seq_embeddings.cpu().numpy())
-        #     np.save(path+folder+"user_gra_embeddings.npy", user_gra_embeddings.cpu().numpy())
-        #     np.save(path+folder+"item.npy", model.event_emb.weight.detach().cpu().numpy())
-        # for file_name in os.listdir(path):
-        #     if float(file_name) < best_[-1][1]:
-        #         shutil.rmtree(path+file_name)
-        #         os.mkdir(path + folder)
-        #         # np.save(path+folder+"wo_item.npy", model.event_emb.weight.detach().cpu().numpy())
-        #         np.save(path+folder+"user_seq_embeddings.npy", user_seq_embeddings.cpu().numpy())
-        #         np.save(path+folder+"user_gra_embeddings.npy", user_gra_embeddings.cpu().numpy())
-        #         np.save(path+folder+"item.npy", model.event_emb.weight.detach().cpu().numpy())
+    print('\n', '-' * 40, 'BEST', '-' * 40)
+    print('k', C.Ks)
+    print('\rP@k:{pre},    R@k:{rec}, \n'
+          '(Best)map@k:{map_}, ndcg@k:{ndcg}'
+          .format(pre=best_[0], rec=best_[1], map_=best_[2], ndcg=best_[3]))
+    print('-' * 40, 'BEST', '-' * 40, '\n')
 
     return best_[-1][1]
 
@@ -219,16 +208,18 @@ def main(trial):
 
 
 if __name__ == '__main__':
-    # main()
-    study = optuna.create_study(direction="maximize")
-    study.optimize(main, n_trials=100)
+    main(None)
 
-    # df = study.trials_dataframe()
+    # if you want to tune hyperparameters, please comment out main(None) and use the following code
+    # study = optuna.create_study(direction="maximize")
+    # study.optimize(main, n_trials=100)
     #
-    # print("Best trial:")
-    # trial = study.best_trial
-    # print("  Value: ", trial.value)
-    # print("  Params: ")
-    # for key, value in trial.params.items():
-    #     print("    {}: {}".format(key, value))
+    # # df = study.trials_dataframe()
+    # #
+    # # print("Best trial:")
+    # # trial = study.best_trial
+    # # print("  Value: ", trial.value)
+    # # print("  Params: ")
+    # # for key, value in trial.params.items():
+    # #     print("    {}: {}".format(key, value))
 

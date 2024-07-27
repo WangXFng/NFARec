@@ -1,4 +1,7 @@
 PAD = 0
+Ks = [1, 5, 10, 20]
+print('k:', Ks)
+
 # Yelp2023  Beauty Food.com Amazon-book ml-1M
 DATASET = "Yelp2023"
 ENCODER = 'THP'  # NHP THP Transformer
@@ -26,7 +29,7 @@ item_dict = {
 ITEM_NUMBER = item_dict.get(DATASET)
 USER_NUMBER = user_dict.get(DATASET)
 
-print('Dataset:', DATASET, '#User:', USER_NUMBER, '#POI', ITEM_NUMBER)
+print('Dataset:', DATASET, '#User:', USER_NUMBER, '#Item', ITEM_NUMBER)
 print('Encoder: ', ENCODER)
 print('ABLATION: ', ABLATION)
 

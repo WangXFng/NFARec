@@ -35,7 +35,6 @@ def read_interaction():
     correlation_matrix = correlation_matrix / correlation_matrix.max()
 
     for i in range(C.USER_NUMBER):
-        # poi_rev = interaction_matrix[:, i]
         nwhere = torch.where(interaction_matrix[i]!=0)[0]
         for j in nwhere:
             adjacency_matrix[j][nwhere] = 1

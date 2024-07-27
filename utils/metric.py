@@ -39,7 +39,7 @@ def vaild(prediction, label, top_n, pre, rec, map_, ndcg):
         try:
             l = l[l != 0] - 1
         except Exception as e:
-            l = l[l != 0]
+            l = l[l != 0]  # the IDs of some datasets start from 1, instead of 0
         recom_list, ground_list = top.cpu().numpy(), l.cpu().numpy()
         recom_lists.append(recom_list)
         if len(ground_list) == 0:
@@ -59,7 +59,7 @@ def pre_rec_top(pre, rec, map_, ndcg, prediction, label, event_type):
         target_[i][e] = 0
     prediction = prediction * target_
 
-    for i, topN in enumerate([1, 5, 10, 20]):
+    for i, topN in enumerate(C.Ks):
         recom_lists = vaild(prediction, label, topN, pre[i], rec[i], map_[i], ndcg[i])
 
     return recom_lists

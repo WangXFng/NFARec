@@ -3,7 +3,7 @@ import torch
 import numpy as np
 import Constants as C
 import scipy.sparse as sp
-from utils.cal_poi_pairwise import read_interaction
+from utils.cal_pairwise import read_interaction
 
 if torch.cuda.is_available():
     import torch.cuda as T
