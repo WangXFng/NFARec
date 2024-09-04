@@ -11,7 +11,6 @@
 ### Note
 * Configures are given by Constants.py and Main.py
 * If you have any problem, please feel free to contact me at kaysenn@163.com.
-* Some readers may have noticed that the loss function is missing a negative sign in the paper. Please take note and verify.
 
 ### Dependencies
 	pip install -r requirement.txt
