@@ -1,8 +1,7 @@
 ## NFARec (SIGIR'24)
 
 ## Paper -  [[ArXiv]](https://arxiv.org/pdf/2404.06900)
-- NFARec: A Negative Feedback-Aware Recommender Model, **SIGIR 2024 Oral**.
-- [**Xinfeng Wang**](https://wangxfng.github.io/), Fumiyo Fukumoto, Jin Cui, Yoshimi Suzuki, Dongjin Yu.
+- NFARec: A Negative Feedback-Aware Recommender Model, **SIGIR 2024**.
 
 
 ### Run
